@@ -34,8 +34,27 @@ def create_dictionnary(directory):
         elif len(item) == 1:
             del lexicon_f[item]
     lexicon_f = lexicon_f.most_common(3000)
-    dictionnary = pd.DataFrame(lexicon_f)
-    print(dictionnary[0])
+    dictionary = pd.DataFrame(lexicon_f)
+    print(dictionary[0])
 
     return lexicon_f
 
+def extract_features(mail_dir , dictionary , classification):
+    emails = [os.path.join(mail_dir,fi) for fi in os.listdir(mail_dir)]
+    featureSet = []
+    current_words=[]
+    for mail in emails:
+        with open(mail, 'r') as f:
+            for i, l in enumerate(f):
+                all_words = word_tokenize(l.lower())
+                current_words +=list(all_words)
+            current_words = [lemmatizer.lemmatize(i) for i in current_words]
+            features = np.zeros(len(dictionary))
+            for word in current_words:
+                    if word.lower() in dictionary:
+                        index_value = dictionary.index(word.lower())
+                        features[index_value] = current_words.count(word)
+        features = list(features)
+        featureSet.append([features, classification])
+
+    return featureSet
