@@ -20,7 +20,7 @@ def create_dictionnary(directory):
     for mail in emails:
         with open(mail , errors='ignore') as m:
             for i, l in enumerate(m):
-                if i>1:
+                if i>=2:
                     all_words = word_tokenize(l.lower())
                     lexicon += list(all_words)
     lexicon = [lemmatizer.lemmatize(i) for i in lexicon]
@@ -34,10 +34,10 @@ def create_dictionnary(directory):
         elif len(item) == 1:
             del lexicon_f[item]
     lexicon_f = lexicon_f.most_common(3000)
-    dictionary = pd.DataFrame(lexicon_f)
-    print(dictionary[0])
-
-    return lexicon_f
+    lexicon_f = pd.DataFrame(lexicon_f)
+    lexicon_final=list(np.array(lexicon_f[0]))
+    print(lexicon_final)
+    return lexicon_final
 
 def extract_features(mail_dir , dictionary , classification):
     emails = [os.path.join(mail_dir,fi) for fi in os.listdir(mail_dir)]
@@ -56,5 +56,9 @@ def extract_features(mail_dir , dictionary , classification):
                         features[index_value] = current_words.count(word)
         features = list(features)
         featureSet.append([features, classification])
-
+        print(featureSet)
     return featureSet
+
+dictionary = create_dictionnary('C:/Users/kirito/Desktop/E-mail_samples')
+extract_features('C:/Users/kirito/Desktop/spam',dictionary,'spam')
+extract_features('C:/Users/kirito/Desktop/ham',dictionary,'ham')
