@@ -59,6 +59,22 @@ def extract_features(mail_dir , dictionary , classification):
         print(featureSet)
     return featureSet
 
-dictionary = create_dictionnary('C:/Users/kirito/Desktop/E-mail_samples')
-extract_features('C:/Users/kirito/Desktop/spam',dictionary,'spam')
-extract_features('C:/Users/kirito/Desktop/ham',dictionary,'ham')
+def create_features_and_labels(spam , ham ,test_size=0.1):
+    dictionary = create_dictionnary('C:/Users/kirito/Desktop/E-mail_samples')
+    #1=spam 0=ham
+    features=[]
+    features += extract_features('C:/Users/kirito/Desktop/spam', dictionary, 1)
+    features += extract_features('C:/Users/kirito/Desktop/ham', dictionary, 0)
+    random.shuffle(features)
+
+    features = np.array(features)
+
+    testing_size = int(test_size * len(features))
+    train_x = list(features[:, 0][:-testing_size])
+    train_y = list(features[:, 1][:-testing_size])
+
+    test_x = list(features[:, 0][-testing_size:])
+    test_y = list(features[:, 1][-testing_size:])
+
+    return train_x, train_y, test_x, test_y
+
