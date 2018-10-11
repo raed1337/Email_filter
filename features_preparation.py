@@ -63,8 +63,8 @@ def create_features_and_labels(spam , ham ,test_size=0.1):
     dictionary = create_dictionnary('C:/Users/kirito/Desktop/E-mail_samples')
     #1=spam 0=ham
     features=[]
-    features += extract_features('C:/Users/kirito/Desktop/spam', dictionary, 1)
-    features += extract_features('C:/Users/kirito/Desktop/ham', dictionary, 0)
+    features += extract_features(spam, dictionary, 1)
+    features += extract_features(ham, dictionary, 0)
     random.shuffle(features)
 
     features = np.array(features)
